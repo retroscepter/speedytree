@@ -2,12 +2,6 @@ import type { Shape } from './shape.ts'
 import type { Point } from './point.ts'
 import type { Rect } from './rect.ts'
 
-export interface CircleOpts {
-    x: number
-    y: number
-    radius: number
-}
-
 export class Circle implements Shape {
     constructor(
         public readonly x: number,
