@@ -26,14 +26,6 @@ export class QuadTree<CustomData = any> {
         this.opts = { ...defaultQuadtreeOpts, ...opts }
     }
 
-    private get divided(): boolean {
-        return this.nodes.size > 0
-    }
-
-    private get contains(): Rect['contains'] {
-        return this.bounds.contains
-    }
-
     private divide(): void {
         const maxDepth = this.opts.maxDepth
         const childMaxDepth = maxDepth === -1 ? -1 : maxDepth - 1
@@ -85,13 +77,13 @@ export class QuadTree<CustomData = any> {
     }
 
     private insertRecursive(point: Point): boolean {
-        if (!this.contains(point)) return false
+        if (!this.bounds.contains(point)) return false
 
         const pointCount = this.points.size
         const maxPointCount = this.opts.maxPointsPerNode
         const maxDepth = this.opts.maxDepth
 
-        if (this.divided) {
+        if (this.nodes.size === 0) {
             if (pointCount < maxPointCount || maxDepth === 0) {
                 this.points.add(point)
             } else if (maxDepth === -1 || maxDepth > 0) {
@@ -99,7 +91,7 @@ export class QuadTree<CustomData = any> {
             }
         }
 
-        if (this.divided) {
+        if (this.nodes.size > 0) {
             for (const node of this.nodes) {
                 if (node.insertRecursive(point)) return true
             }
@@ -109,9 +101,9 @@ export class QuadTree<CustomData = any> {
     }
 
     private removeRecursive(point: Point): boolean {
-        if (!this.contains(point)) return false
+        if (!this.bounds.contains(point)) return false
 
-        if (!this.divided) {
+        if (this.nodes.size === 0) {
             for (const p of this.points) {
                 if (testPointEquality(point, p)) {
                     this.points.delete(p)
@@ -129,7 +121,9 @@ export class QuadTree<CustomData = any> {
         }
 
         if (this.opts.removeEmptyNodes) {
-            if (this.nodes.every(n => n.points.size === 0 && !n.divided)) {
+            if (
+                this.nodes.every(n => n.points.size === 0 && n.nodes.size === 0)
+            ) {
                 this.nodes.clear()
             }
         }
@@ -142,7 +136,7 @@ export class QuadTree<CustomData = any> {
 
         const pointsFound: Point[] = []
 
-        if (this.divided) {
+        if (this.nodes.size > 0) {
             for (const node of this.nodes) {
                 pointsFound.push(...node.queryRecursive(range))
             }
