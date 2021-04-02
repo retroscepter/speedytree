@@ -6,7 +6,7 @@ A fast quadtree implementation in JavaScript for Deno.
 
 ```JavaScript
 
-import { QuadTree } from 'https://deno.land/x/speedytree@1.0.0/mod.ts'
+import { QuadTree } from 'https://deno.land/x/speedytree@1.0.1/mod.ts'
 
 /* TODO */
 
