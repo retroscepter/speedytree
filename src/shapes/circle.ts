@@ -16,8 +16,8 @@ export class Circle implements Shape {
     }
 
     intersects(range: Rect): boolean {
-        const xDiff = range.x - this.x
-        const yDiff = range.y - this.y
+        const xDiff = Math.abs(range.x - this.x)
+        const yDiff = Math.abs(range.y - this.y)
 
         if (xDiff > range.width / 2 + this.radius) return false
         if (yDiff > range.height / 2 + this.radius) return false
