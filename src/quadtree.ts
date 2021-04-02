@@ -1,6 +1,7 @@
 import { Superset } from '../deps.ts'
 
 import type { Point } from './shapes/point.ts'
+import type { Shape } from './shapes/shape.ts'
 import { Rect } from './shapes/rect.ts'
 
 export interface QuadtreeOpts {
@@ -79,6 +80,10 @@ export class QuadTree<CustomData = any> {
         return returnValue
     }
 
+    public query(range: Shape): Point<CustomData>[] {
+        return this.queryRecursive(range)
+    }
+
     private insertRecursive(point: Point): boolean {
         if (!this.contains(point)) return false
 
@@ -130,6 +135,24 @@ export class QuadTree<CustomData = any> {
         }
 
         return returnValue
+    }
+
+    private queryRecursive(range: Shape): Point<CustomData>[] {
+        if (!range.intersects(this.bounds)) return []
+
+        const pointsFound: Point[] = []
+
+        if (this.divided) {
+            for (const node of this.nodes) {
+                pointsFound.push(...node.queryRecursive(range))
+            }
+        } else {
+            for (const point of this.points) {
+                if (range.contains(point)) pointsFound.push(point)
+            }
+        }
+
+        return pointsFound
     }
 }
 
