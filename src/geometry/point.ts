@@ -1,5 +1,7 @@
-export interface Point<CustomData = any> {
-    x: number
-    y: number
-    data: CustomData
+export class Point<CustomData = any> {
+    constructor(
+        public readonly x: number,
+        public readonly y: number,
+        public readonly data?: CustomData
+    ) {}
 }
