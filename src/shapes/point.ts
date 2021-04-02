@@ -1,5 +1,4 @@
-export interface Point<T = any> {
+export interface Point {
     x: number
     y: number
-    data: T
 }
