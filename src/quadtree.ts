@@ -5,10 +5,12 @@ import type { Shape } from './geometry/shape.ts'
 import { Rect } from './geometry/rect.ts'
 
 export interface DividedTree<CustomData = any> {
+    divided: true
     nodes: Tree<CustomData>[]
 }
 
 export interface UndividedTree<CustomData = any> {
+    divided: false
     points: Point<CustomData>[]
 }
 
@@ -40,9 +42,12 @@ export class QuadTree<CustomData = any> {
 
     public getTree(): Tree<CustomData> {
         if (this.nodes.size > 0) {
-            return { nodes: this.nodes.array().map(n => n.getTree()) }
+            return {
+                divided: true,
+                nodes: this.nodes.array().map(n => n.getTree())
+            }
         } else {
-            return { points: this.points.array().slice() }
+            return { divided: false, points: this.points.array().slice() }
         }
     }
 
