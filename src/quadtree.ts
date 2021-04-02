@@ -4,25 +4,25 @@ import type { Point } from './geometry/point.ts'
 import type { Shape } from './geometry/shape.ts'
 import { Rect } from './geometry/rect.ts'
 
-export interface QuadtreeOpts {
+export interface QuadTreeOpts {
     maxDepth: number
     maxPointsPerNode: number
     removeEmptyNodes: boolean
 }
 
-export const defaultQuadtreeOpts: QuadtreeOpts = {
+export const defaultQuadtreeOpts: QuadTreeOpts = {
     maxDepth: -1,
     maxPointsPerNode: 4,
     removeEmptyNodes: false
 }
 
 export class QuadTree<CustomData = any> {
-    public opts: QuadtreeOpts
+    public opts: QuadTreeOpts
 
     private points: Superset<Point<CustomData>> = new Superset()
     private nodes: Superset<QuadTree<Point<CustomData>>> = new Superset()
 
-    constructor(public bounds: Rect, opts?: Partial<QuadtreeOpts>) {
+    constructor(public bounds: Rect, opts?: Partial<QuadTreeOpts>) {
         this.opts = { ...defaultQuadtreeOpts, ...opts }
     }
 
