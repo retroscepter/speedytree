@@ -2,15 +2,19 @@
 
 A fast quadtree implementation in JavaScript for Deno.
 
+<!--
+
 ## Usage
 
 ```JavaScript
 
-import { Supermap } from 'https://deno.land/x/speedytree@0.1.1/mod.ts'
+import { QuadTree } from 'https://deno.land/x/speedytree@0.0.1/mod.ts'
 
 /* TODO */
 
 ```
+
+!-->
 
 <!--
 
