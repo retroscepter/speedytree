@@ -56,10 +56,10 @@ export class QuadTree<CustomData = any> {
         const width = this.bounds.width / 2
         const height = this.bounds.height / 2
 
-        const ne = new Rect(x + width, y, width, height)
-        const nw = new Rect(x, y, width, height)
-        const se = new Rect(x + width, y + height, width, height)
-        const sw = new Rect(x, y + height, width, height)
+        const ne = new Rect(x + width / 2, y - height / 2, width, height)
+        const nw = new Rect(x - width / 2, y - height / 2, width, height)
+        const se = new Rect(x + width / 2, y + height / 2, width, height)
+        const sw = new Rect(x - width / 2, y + height / 2, width, height)
 
         this.nodes
             .add(new QuadTree(ne, childOpts))
