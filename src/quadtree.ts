@@ -51,30 +51,8 @@ export class QuadTree<CustomData = any> {
         }
     }
 
-    private divide(): void {
-        const maxDepth = this.opts.maxDepth
-        const childMaxDepth = maxDepth === -1 ? -1 : maxDepth - 1
-        const childOpts = { ...this.opts, maxDepth: childMaxDepth }
-
-        const x = this.bounds.x
-        const y = this.bounds.y
-        const width = this.bounds.width / 2
-        const height = this.bounds.height / 2
-
-        const ne = new Rect(x + width / 2, y - height / 2, width, height)
-        const nw = new Rect(x - width / 2, y - height / 2, width, height)
-        const se = new Rect(x + width / 2, y + height / 2, width, height)
-        const sw = new Rect(x - width / 2, y + height / 2, width, height)
-
-        this.nodes
-            .add(new QuadTree(ne, childOpts))
-            .add(new QuadTree(nw, childOpts))
-            .add(new QuadTree(se, childOpts))
-            .add(new QuadTree(sw, childOpts))
-
-        this.insert(...this.points.array().slice())
-
-        this.points.clear()
+    public getPoints(): Point<CustomData>[] {
+        return this.getAllPointsRecursive()
     }
 
     public insert(...points: Point<CustomData>[]): boolean {
@@ -99,6 +77,32 @@ export class QuadTree<CustomData = any> {
 
     public query(range: Shape): Point<CustomData>[] {
         return this.queryRecursive(range)
+    }
+
+    private divide(): void {
+        const maxDepth = this.opts.maxDepth
+        const childMaxDepth = maxDepth === -1 ? -1 : maxDepth - 1
+        const childOpts = { ...this.opts, maxDepth: childMaxDepth }
+
+        const x = this.bounds.x
+        const y = this.bounds.y
+        const width = this.bounds.width / 2
+        const height = this.bounds.height / 2
+
+        const ne = new Rect(x + width / 2, y - height / 2, width, height)
+        const nw = new Rect(x - width / 2, y - height / 2, width, height)
+        const se = new Rect(x + width / 2, y + height / 2, width, height)
+        const sw = new Rect(x - width / 2, y + height / 2, width, height)
+
+        this.nodes
+            .add(new QuadTree(ne, childOpts))
+            .add(new QuadTree(nw, childOpts))
+            .add(new QuadTree(se, childOpts))
+            .add(new QuadTree(sw, childOpts))
+
+        this.insert(...this.points.array().slice())
+
+        this.points.clear()
     }
 
     private insertRecursive(point: Point): boolean {
@@ -173,6 +177,20 @@ export class QuadTree<CustomData = any> {
         }
 
         return pointsFound
+    }
+
+    private getAllPointsRecursive(): Point<CustomData>[] {
+        const points: Point[] = []
+
+        if (this.nodes.size > 0) {
+            for (const node of this.nodes) {
+                points.push(...node.getAllPointsRecursive())
+            }
+        } else {
+            points.push(...this.points)
+        }
+
+        return points
     }
 }
 
