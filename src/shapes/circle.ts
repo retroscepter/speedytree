@@ -9,15 +9,11 @@ export interface CircleOpts {
 }
 
 export class Circle implements Shape {
-    public readonly x: number
-    public readonly y: number
-    public readonly radius: number
-
-    constructor(opts: CircleOpts) {
-        this.x = opts.x
-        this.y = opts.y
-        this.radius = opts.radius
-    }
+    constructor(
+        public readonly x: number,
+        public readonly y: number,
+        public readonly radius: number
+    ) {}
 
     contains(point: Point): boolean {
         const xDiff = point.x - this.x

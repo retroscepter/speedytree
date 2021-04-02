@@ -1,25 +1,13 @@
 import type { Shape } from './shape.ts'
 import type { Point } from './point.ts'
 
-export interface RectOpts {
-    x: number
-    y: number
-    width: number
-    height: number
-}
-
 export class Rect implements Shape {
-    public readonly x: number
-    public readonly y: number
-    public readonly width: number
-    public readonly height: number
-
-    constructor(opts: RectOpts) {
-        this.x = opts.x
-        this.y = opts.y
-        this.width = opts.width
-        this.height = opts.height
-    }
+    constructor(
+        public readonly x: number,
+        public readonly y: number,
+        public readonly width: number,
+        public readonly height: number
+    ) {}
 
     contains(point: Point): boolean {
         return (
