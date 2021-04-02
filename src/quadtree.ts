@@ -15,11 +15,11 @@ export const defaultQuadtreeOpts: QuadtreeOpts = {
     removeEmptyNodes: false
 }
 
-export class QuadTree<CustomPoint = Point> {
+export class QuadTree<CustomData = any> {
     public opts: QuadtreeOpts
 
-    private points: Superset<CustomPoint> = new Superset()
-    private nodes: Superset<QuadTree<CustomPoint>> = new Superset()
+    private points: Superset<Point<CustomData>> = new Superset()
+    private nodes: Superset<QuadTree<Point<CustomData>>> = new Superset()
 
     constructor(public bounds: Rect, opts?: Partial<QuadtreeOpts>) {
         this.opts = { ...defaultQuadtreeOpts, ...opts }
@@ -27,6 +27,10 @@ export class QuadTree<CustomPoint = Point> {
 
     private get divided(): boolean {
         return this.nodes.size > 0
+    }
+
+    private get contains(): Rect['contains'] {
+        return this.bounds.contains
     }
 
     private divide(): void {
@@ -53,5 +57,29 @@ export class QuadTree<CustomPoint = Point> {
         // this.insert(...this.points.array().slice())
 
         this.points.clear()
+    }
+
+    private insertRecursive(point: Point): boolean {
+        if (this.contains(point)) return false
+
+        const pointCount = this.points.size
+        const maxPointCount = this.opts.maxPointsPerNode
+        const maxDepth = this.opts.maxDepth
+
+        if (this.divided) {
+            if (pointCount < maxPointCount || maxDepth === 0) {
+                this.points.add(point)
+            } else if (maxDepth === -1 || maxDepth > 0) {
+                this.divide()
+            }
+        }
+
+        if (this.divided) {
+            for (const node of this.nodes) {
+                if (node.insertRecursive(point)) return true
+            }
+        }
+
+        return false
     }
 }
