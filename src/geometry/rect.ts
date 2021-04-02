@@ -9,21 +9,37 @@ export class Rect implements Shape {
         public readonly height: number
     ) {}
 
+    get top(): number {
+        return this.y - this.height / 2
+    }
+
+    get bottom(): number {
+        return this.y + this.height / 2
+    }
+
+    get left(): number {
+        return this.x - this.width / 2
+    }
+
+    get right(): number {
+        return this.x + this.width / 2
+    }
+
     contains(point: Point): boolean {
         return (
-            point.x >= this.x &&
-            point.x <= this.x + this.width &&
-            point.y >= this.y &&
-            point.y <= this.y + this.height
+            point.x >= this.left &&
+            point.x <= this.right &&
+            point.y >= this.top &&
+            point.y <= this.bottom
         )
     }
 
     intersects(range: Rect): boolean {
         return !(
-            range.x > this.x + this.width ||
-            range.x + range.width < this.x ||
-            range.y > this.y + this.width ||
-            range.y + range.width < this.y
+            range.left > this.right ||
+            range.right < this.left ||
+            range.top > this.bottom ||
+            range.bottom < this.top
         )
     }
 }
