@@ -106,6 +106,7 @@ export class QuadTree<CustomData = any> {
         if (this.nodes.size === 0) {
             if (pointCount < maxPointCount || maxDepth === 0) {
                 this.points.add(point)
+                return true
             } else if (maxDepth === -1 || maxDepth > 0) {
                 this.divide()
             }
