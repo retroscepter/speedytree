@@ -54,13 +54,33 @@ export class QuadTree<CustomData = any> {
             .add(new QuadTree(se, childOpts))
             .add(new QuadTree(sw, childOpts))
 
-        // this.insert(...this.points.array().slice())
+        this.insert(...this.points.array().slice())
 
         this.points.clear()
     }
 
+    public insert(...points: Point<CustomData>[]): boolean {
+        let returnValue = false
+
+        for (const point of points) {
+            if (this.insertRecursive(point)) returnValue = true
+        }
+
+        return returnValue
+    }
+
+    public remove(...points: Point<CustomData>[]): boolean {
+        let returnValue = false
+
+        for (const point of points) {
+            if (this.removeRecursive(point)) returnValue = true
+        }
+
+        return returnValue
+    }
+
     private insertRecursive(point: Point): boolean {
-        if (this.contains(point)) return false
+        if (!this.contains(point)) return false
 
         const pointCount = this.points.size
         const maxPointCount = this.opts.maxPointsPerNode
@@ -82,4 +102,37 @@ export class QuadTree<CustomData = any> {
 
         return false
     }
+
+    private removeRecursive(point: Point): boolean {
+        if (!this.contains(point)) return false
+
+        if (!this.divided) {
+            for (const p of this.points) {
+                if (testPointEquality(point, p)) {
+                    this.points.delete(p)
+                    return true
+                }
+            }
+
+            return false
+        }
+
+        let returnValue = false
+
+        for (const node of this.nodes) {
+            if (node.removeRecursive(point)) returnValue = true
+        }
+
+        if (this.opts.removeEmptyNodes) {
+            if (this.nodes.every(n => n.points.size === 0 && !n.divided)) {
+                this.nodes.clear()
+            }
+        }
+
+        return returnValue
+    }
+}
+
+function testPointEquality(a: Point, b: Point) {
+    return a.x === b.x && a.y === b.y
 }
