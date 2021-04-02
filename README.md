@@ -2,24 +2,16 @@
 
 A fast quadtree implementation in JavaScript for Deno.
 
-<!--
-
 ## Usage
 
 ```JavaScript
 
-import { QuadTree } from 'https://deno.land/x/speedytree@0.0.1/mod.ts'
+import { QuadTree } from 'https://deno.land/x/speedytree@1.0.0/mod.ts'
 
 /* TODO */
 
 ```
 
-!-->
-
-<!--
-
 ## [Documentation](https://doc.deno.land/https/deno.land/x/speedytree/mod.ts)
 
 This module has first-class Deno support, documentation will always be available at [doc.deno.land](https://doc.deno.land/https/deno.land/x/speedytree/mod.ts).
-
-!-->
