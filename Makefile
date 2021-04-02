@@ -1,4 +1,5 @@
 install:
+	deno cache deps.ts
 	deno cache tests/*
 
 lint:
